@@ -10,7 +10,7 @@ from security import authenticate, identity
 app = Flask(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-app.secret_key = "biodun"
+app.secret_key = ""
 api = Api(app)
 
 jwt = JWT(app, authenticate, identity)

@@ -47,6 +47,3 @@ class UserDbManager():
         cursor.execute(insert_query, (username, password, email))
         connection.commit()
         connection.close()
-
-        
-
