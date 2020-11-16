@@ -1,4 +1,4 @@
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Resource, reqparse
 from db.userdbmanager import UserDbManager
 
 class UserResource(Resource):
