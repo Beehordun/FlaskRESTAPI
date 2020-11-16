@@ -1,7 +1,7 @@
 from flask_restful import Api, Resource, reqparse
 from flask_jwt import jwt_required
 from db.itemdbmanager import ItemDbManager
-from db.item import Item
+from models.item import Item
 
 class ItemResource(Resource):
     parser = reqparse.RequestParser()
@@ -15,10 +15,8 @@ class ItemResource(Resource):
     def get(self, name):
         item = ItemDbManager.get_item_by_name(name)
         if item:
-            result = {'name': name, 'price': item.price}
-            return {'item': result}
+            return {'item': item.json()}
         return {"message": "{} not found".format(name)}, 404
-
 
     @jwt_required()
     def post(self, name):
@@ -40,21 +38,19 @@ class ItemResource(Resource):
         items = ItemDbManager.get_all_items()
 
         for item in items:
+            item.price = price
             if item.name == name:
-                item.price = price
                 ItemDbManager.update_item(item)
-                return {'name': name, 'price': price}, 200
-
-        item = {'name': name, 'price': price}
+                return item.json(), 200
         ItemDbManager.insert_item(name, price)
-        return {'name': name, 'price': price}, 201
+        return item.json(), 201
     
     @jwt_required()
     def delete(self, name):
         items = ItemDbManager.get_all_items()
         for item in items:
             if item.name == name:
-                ItemDbManager.delete_item(name)
+                ItemDbManager.delete_items(name)
                 return {'message': '{} deleted'.format(name)}, 200
         return {'message': '{} not found'.format(name)}, 400
 
@@ -66,6 +62,6 @@ class ItemsResource(Resource):
         items = []
 
         for item in all_item:
-            items.append({'name': item.name, 'price': item.price})
+            items.append(item.json())
 
         return {'items': items}, 200

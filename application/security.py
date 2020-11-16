@@ -1,6 +1,6 @@
 from werkzeug.security import safe_str_cmp
 
-from db.user import User
+from models.user import User
 from db.userdbmanager import UserDbManager
 
 def authenticate(email, password):
